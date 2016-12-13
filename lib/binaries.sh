@@ -9,9 +9,15 @@ needs_resolution() {
 
 install_yarn() {
   local dir="$1"
+  local version=${2:-latest}
 
-  echo "Downloading and installing yarn..."
-  local download_url="https://yarnpkg.com/latest.tar.gz"
+  if [ "$version" = 'latest' ]; then
+    local download_url="https://yarnpkg.com/latest.tar.gz"
+  else
+    local download_url="https://yarnpkg.com/downloads/$version/yarn-v$version.tar.gz"
+  fi
+
+  echo "Downloading and installing yarn ($version)..."
   local code=$(curl "$download_url" -L --silent --fail --retry 5 --retry-max-time 15 -o /tmp/yarn.tar.gz --write-out "%{http_code}")
   if [ "$code" != "200" ]; then
     echo "Unable to download yarn: $code" && false

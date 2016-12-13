@@ -1,9 +1,27 @@
+list_dependencies() {
+  local build_dir="$1"
+
+  cd "$build_dir"
+  if $YARN; then
+    echo ""
+    (yarn ls || true) 2>/dev/null
+    echo ""
+  else
+    (npm ls --depth=0 | tail -n +2 || true) 2>/dev/null
+  fi
+}
+
 run_if_present() {
   local script_name=${1:-}
   local has_script=$(read_json "$BUILD_DIR/package.json" ".scripts[\"$script_name\"]")
   if [ -n "$has_script" ]; then
-    echo "Running $script_name"
-    npm run "$script_name" --if-present
+    if $YARN; then
+      echo "Running $script_name (yarn)"
+      yarn run "$script_name"
+    else
+      echo "Running $script_name"
+      npm run "$script_name" --if-present
+    fi
   fi
 }
 
@@ -11,10 +29,12 @@ yarn_node_modules() {
   local build_dir=${1:-}
 
   echo "Installing node modules (yarn)"
-  yarn 2>&1
+  rm -rf "$build_dir/node_modules"  # with a deterministic package manager, there's no longer any reason to check in node_modules
+  cd "$build_dir"
+  yarn install --no-lockfile 2>&1
 }
 
-install_node_modules() {
+npm_node_modules() {
   local build_dir=${1:-}
 
   if [ -e $build_dir/package.json ]; then
@@ -31,7 +51,7 @@ install_node_modules() {
   fi
 }
 
-rebuild_node_modules() {
+npm_rebuild() {
   local build_dir=${1:-}
 
   if [ -e $build_dir/package.json ]; then
