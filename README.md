@@ -1,13 +1,13 @@
 # Heroku Buildpack for vitaminjs
 
-You will need to add the following to your `.vitaminrc`
+Run
 ```
-{
-  "server": {
-    "host": "0.0.0.0"
-  }
-}
+$ heroku buildpacks:set https://github.com/victormours/heroku-buildpack-vitaminjs
 ```
-Then run `heroku buildpacks:set https://github.com/victormours/heroku-buildpack-vitaminjs`
+
+And then
+```
+$ git push heroku master
+```
 
 And you're good to go!
