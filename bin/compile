@@ -175,6 +175,9 @@ summarize_build() {
   fi
 }
 
+$BUILD_DIR/node_modules/.bin/vitamin build
+
+
 header "Build succeeded!"
 summarize_build | output "$LOG_FILE"
 
