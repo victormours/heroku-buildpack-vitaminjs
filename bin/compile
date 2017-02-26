@@ -175,6 +175,10 @@ summarize_build() {
   fi
 }
 
+echo "Port"
+echo $PORT
+echo "Host"
+echo $HOST
 $BUILD_DIR/node_modules/.bin/vitamin build
 
 
