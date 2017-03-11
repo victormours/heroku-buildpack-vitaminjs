@@ -177,8 +177,6 @@ summarize_build() {
 
 cd $BUILD_DIR
 HOST="0.0.0.0" $BUILD_DIR/node_modules/.bin/vitamin build
-sed 's/"port": 3000/"port": process.env.PORT/' $BUILD_DIR/build/server_bundle.js > $BUILD_DIR/build/server_bundle_env_port.js
-mv $BUILD_DIR/build/server_bundle_env_port.js $BUILD_DIR/build/server_bundle.js
 cd -
 
 
